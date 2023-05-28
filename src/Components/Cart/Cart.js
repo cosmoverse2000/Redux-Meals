@@ -7,7 +7,7 @@ import Modal from "../UI/Modal/Modal";
 const Cart = (props) => {
   const removeHandler = () => {};
   return (
-    <Modal>
+    <Modal onBackdropClick={props.setShowCartFalse}>
       <div className={classes["cart-items"]}>
         <CartItem
           price={22.99}

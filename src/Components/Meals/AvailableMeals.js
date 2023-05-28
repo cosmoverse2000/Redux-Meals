@@ -1,17 +1,25 @@
 import React from "react";
-import Card from "../UI/Card/Card";
+
 import classes from "./AvailableMeals.module.css";
+import Card from "../UI/Card/Card";
+
 import MealItem from "./MealItem";
 
-const AvailableMeals = () => {
+const AvailableMeals = (props) => {
   return (
     <div className={classes.meals}>
       <Card>
         <ul>
-          <MealItem />
-          <MealItem />
-          <MealItem />
-          <MealItem />
+          {props.mealsData.map((each) => {
+            return (
+              <MealItem
+                key={each.id}
+                name={each.name}
+                description={each.description}
+                price={each.price}
+              />
+            );
+          })}
         </ul>
       </Card>
     </div>

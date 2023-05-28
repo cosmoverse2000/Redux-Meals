@@ -5,6 +5,8 @@ import MealsSummary from "./Components/MealsSummary/MealsSummary";
 import AvailableMeals from "./Components/Meals/AvailableMeals";
 import Cart from "./Components/Cart/Cart";
 
+import mealsData from "./Data/dummy-meals";
+
 function App() {
   const [isShowCart, setIsShowCart] = useState(false);
 
@@ -18,7 +20,7 @@ function App() {
     <>
       <Header showCart={showCartHandler} />
       <MealsSummary />
-      <AvailableMeals />
+      <AvailableMeals mealsData={mealsData} />
       {isShowCart && <Cart setShowCartFalse={setShowCartFalse} />}
     </>
   );
