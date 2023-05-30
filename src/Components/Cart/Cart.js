@@ -3,22 +3,32 @@ import classes from "./Cart.module.css";
 
 import CartItem from "./CartItem";
 import Modal from "../UI/Modal/Modal";
+import mealsData from "../../Data/dummy-meals";
 
 const Cart = (props) => {
-  const removeHandler = () => {};
   return (
     <Modal onBackdropClick={props.setShowCartFalse}>
       <div className={classes["cart-items"]}>
-        <CartItem
-          price={22.99}
-          name={"Shushi"}
-          amount={2}
-          onRemove={removeHandler}
-          onAdd={removeHandler}
-        />
+        {props.cartData.map((each) => {
+          const mealData = mealsData.filter((each1) => {
+            return each1.id === each.mealId;
+          })[0];
+          return (
+            <CartItem
+              key={each.mealId}
+              mealId={each.mealId}
+              price={mealData.price}
+              name={mealData.name}
+              amount={each.mealCount}
+              onRemove={props.removeItemHandler}
+              onAdd={props.addItemHandler}
+            />
+          );
+        })}
+
         <div className={classes.total}>
           <div>Total Amount</div>
-          <div>$33.00</div>
+          <div>${props.totalAmount.toFixed(2)}</div>
         </div>
         <div className={classes.actions}>
           <button

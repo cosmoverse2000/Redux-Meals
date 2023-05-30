@@ -14,9 +14,11 @@ const AvailableMeals = (props) => {
             return (
               <MealItem
                 key={each.id}
+                itemId={each.id}
                 name={each.name}
                 description={each.description}
                 price={each.price}
+                addItemsFromMealForm={props.addItemsFromMealForm}
               />
             );
           })}
