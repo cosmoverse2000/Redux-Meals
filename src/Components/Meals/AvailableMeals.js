@@ -4,13 +4,14 @@ import classes from "./AvailableMeals.module.css";
 import Card from "../UI/Card/Card";
 
 import MealItem from "./MealItem";
+import mealsData from "../../Data/dummy-meals";
 
-const AvailableMeals = (props) => {
+const AvailableMeals = () => {
   return (
     <div className={classes.meals}>
       <Card>
         <ul>
-          {props.mealsData.map((each) => {
+          {mealsData.map((each) => {
             return (
               <MealItem
                 key={each.id}
@@ -18,7 +19,6 @@ const AvailableMeals = (props) => {
                 name={each.name}
                 description={each.description}
                 price={each.price}
-                addItemsFromMealForm={props.addItemsFromMealForm}
               />
             );
           })}

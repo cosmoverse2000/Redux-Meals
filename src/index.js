@@ -6,6 +6,7 @@ import App from "./App";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
+    {/* REMEMBER REACT STRICTMODE CAUSE TWICE RENDERING IN DEV MODE TO RECHECK SIDE EFFECTS< THIS NOT HAPPEN IN PRODUCTION */}
     <App />
   </React.StrictMode>
 );

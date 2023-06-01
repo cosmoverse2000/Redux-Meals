@@ -4,7 +4,7 @@ import MealItemForm from "./MealItemForm";
 
 const MealItem = (props) => {
   return (
-    <div className={classes.meal}>
+    <li className={classes.meal}>
       <div>
         <h3>{props.name}</h3>
         <div className={classes.description}>{props.description}</div>
@@ -13,9 +13,9 @@ const MealItem = (props) => {
       <MealItemForm
         itemId={props.itemId}
         price={props.price}
-        addItemsFromMealForm={props.addItemsFromMealForm}
+        name={props.name}
       />
-    </div>
+    </li>
   );
 };
 
