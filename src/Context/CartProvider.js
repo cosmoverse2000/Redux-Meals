@@ -49,7 +49,11 @@ const cartStateReducer = (state, action) => {
 
       updatedCartData[existingCartItemIndex] = updatedCartItem;
     }
+
     return { cartData: updatedCartData, totalAmount: updatedTotalAmount };
+  }
+  if (action.type === "CLEAR_CART") {
+    return { cartData: [], totalAmount: 0 };
   }
   return { cartData: [], totalAmount: 0 };
 };
@@ -74,6 +78,9 @@ export const CartProvider = (props) => {
     //       ? 20 - mealObj.mealCount
     //       : item.mealCount;
   };
+  const clearCart = () => {
+    dispatchCartData({ type: "CLEAR_CART" });
+  };
   console.log("CartPro");
 
   return (
@@ -83,6 +90,7 @@ export const CartProvider = (props) => {
         totalAmount: cartState.totalAmount,
         addItemHandler: addItemHandler,
         removeItemHandler: removeItemHandler,
+        clearCart: clearCart,
       }}
     >
       {props.children}

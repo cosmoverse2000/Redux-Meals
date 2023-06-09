@@ -7,6 +7,7 @@ import MealItem from "./MealItem";
 import useFetch from "../../hooks/use-fetch";
 
 const AvailableMeals = () => {
+  //// useFetch Started
   const { isLoading, error, fetchData } = useFetch();
   const [mealsData, setMealsData] = useState([]);
 
@@ -20,6 +21,7 @@ const AvailableMeals = () => {
         price: data[key].price,
       });
     }
+
     setMealsData(loadedMeals);
   };
 
@@ -35,26 +37,48 @@ const AvailableMeals = () => {
   console.log("isloading:", isLoading);
   console.log("error", error);
 
+  //// useFetch end
+
+  let content =
+    mealsData.length > 0 ? (
+      <ul>
+        {mealsData.map((each) => {
+          return (
+            <MealItem
+              key={each.id}
+              itemId={each.id}
+              name={each.name}
+              description={each.description}
+              price={each.price}
+            />
+          );
+        })}
+      </ul>
+    ) : (
+      <h2>No Meals Data Found In DataBase. Add Some!</h2>
+    );
+
+  if (error) {
+    content = (
+      <>
+        <h2>There is an error : {error}</h2>
+        <button
+          onClick={() => {
+            window.location.reload(false);
+          }}
+        >
+          Try Again
+        </button>
+      </>
+    );
+  }
+  if (isLoading) {
+    content = <h2>Loading....</h2>;
+  }
+
   return (
     <div className={classes.meals}>
-      <Card>
-        {isLoading && <p>Loading...</p>}
-        {!isLoading && error && <p>There Is An ERROR : {error}</p>}
-        <ul>
-          {mealsData.length > 0 &&
-            mealsData.map((each) => {
-              return (
-                <MealItem
-                  key={each.id}
-                  itemId={each.id}
-                  name={each.name}
-                  description={each.description}
-                  price={each.price}
-                />
-              );
-            })}
-        </ul>
-      </Card>
+      <Card>{content}</Card>
     </div>
   );
 };

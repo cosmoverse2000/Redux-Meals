@@ -1,14 +1,47 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import classes from "./Cart.module.css";
 
 import CartItem from "./CartItem";
 import Modal from "../UI/Modal/Modal";
 
 import CartContext from "../../Context/CartContext";
+import useFetch from "../../hooks/use-fetch";
+import ChekoutForm from "./ChekoutForm";
 
 const Cart = (props) => {
   const cartCtx = useContext(CartContext);
+  const { isLoading, error, fetchData } = useFetch();
+  const [showForm, setShowForm] = useState(false);
+  const [orderSuccess, setOrderSuccess] = useState(false);
 
+  const applyDataFunc = (data) => {
+    console.log(data);
+    if (data) {
+      setOrderSuccess(true);
+    }
+  };
+  const submitHandler = (userData) => {
+    console.log({
+      orderedItems: cartCtx.cartData,
+      user: userData,
+    });
+
+    const httpData = {
+      url: "https://react-http-db9a9-default-rtdb.firebaseio.com/orders.json",
+      method: "POST",
+      body: {
+        orderedItems: cartCtx.cartData,
+        user: userData,
+      },
+      headers: {
+        "content-type": "application/json",
+      },
+    };
+
+    fetchData(httpData, applyDataFunc);
+  };
+
+  ////// FEEDBACK AND CARTITEMS
   const cartItems = (
     <ul className={classes["cart-items"]}>
       {cartCtx.cartData.map((item) => {
@@ -26,9 +59,10 @@ const Cart = (props) => {
       })}
     </ul>
   );
+  ////// BEFOR CONFIRM CLICK -CART CONTENT
 
-  return (
-    <Modal onBackdropClick={props.toggleCart}>
+  let cartContent = (
+    <div className={classes.cart}>
       {cartItems}
 
       <div className={classes.total}>
@@ -41,11 +75,65 @@ const Cart = (props) => {
           Close
         </button>
         {cartCtx.cartData.length > 0 && (
-          <button className={classes.button}>Order</button>
+          <button
+            className={classes.button}
+            onClick={() => {
+              setShowForm(true);
+            }}
+          >
+            Order
+          </button>
         )}
       </div>
-    </Modal>
+      {cartCtx.cartData.length > 0 && showForm && (
+        <ChekoutForm onConfirm={submitHandler} />
+      )}
+    </div>
   );
+
+  ////// AFTER CONFIRM CLICK -FEEDBACK CONTENT
+  if (isLoading) {
+    cartContent = (
+      <div className={classes.actions}>
+        <h3>Wait! your order in queue ... </h3>
+        <button className={classes.button} disabled={true}>
+          Confirming....
+        </button>
+      </div>
+    );
+  }
+
+  if (!isLoading && error) {
+    cartContent = (
+      <div className={classes.actions}>
+        <h3>Sorry! your order in failed. Something wrong. </h3>
+        <button className={classes.button} onClick={props.toggleCart}>
+          Try Again
+        </button>
+      </div>
+    );
+  }
+
+  if (!isLoading && orderSuccess) {
+    cartContent = (
+      <div className={classes.actions}>
+        <h3>Buyaah! Your order has been placed successfully 🤝. </h3>
+        <button
+          className={classes.button}
+          onClick={() => {
+            props.toggleCart();
+            cartCtx.clearCart();
+          }}
+        >
+          Close
+        </button>
+      </div>
+    );
+  }
+
+  console.log("CART RENDERED");
+
+  return <Modal onBackdropClick={props.toggleCart}>{cartContent}</Modal>;
 };
 
 export default Cart;
