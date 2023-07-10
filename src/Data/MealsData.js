@@ -11,7 +11,7 @@ const MealsData = () => {
   useEffect(() => {
     fetchData(
       {
-        url: "https://react-http-db9a9-default-rtdb.firebaseio.com/meals.json",
+        url: process.env.REACT_APP_FIREBASEAPI + "/meals.json",
       },
       ApplyDataFunc
     );

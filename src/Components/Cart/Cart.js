@@ -27,7 +27,7 @@ const Cart = (props) => {
     });
 
     const httpData = {
-      url: "https://react-http-db9a9-default-rtdb.firebaseio.com/orders.json",
+      url: process.env.REACT_APP_FIREBASEAPI + "/orders.json",
       method: "POST",
       body: {
         orderedItems: cartCtx.cartData,

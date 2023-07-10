@@ -8,6 +8,7 @@ import useFetch from "../../hooks/use-fetch";
 
 const AvailableMeals = () => {
   //// useFetch Started
+
   const { isLoading, error, fetchData } = useFetch();
   const [mealsData, setMealsData] = useState([]);
 
@@ -28,7 +29,7 @@ const AvailableMeals = () => {
   useEffect(() => {
     fetchData(
       {
-        url: "https://react-http-db9a9-default-rtdb.firebaseio.com/meals.json",
+        url: process.env.REACT_APP_FIREBASEAPI + "/meals.json",
       },
       ApplyDataFunc
     );
