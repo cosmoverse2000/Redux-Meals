@@ -7,8 +7,8 @@ const Header = (props) => {
   return (
     <>
       <header className={classes.header}>
-        <h1>ReactMeals</h1>
-        <HeaderCartButton toggleCart={props.toggleCart} />
+        <h1>ReduxMeals</h1>
+        <HeaderCartButton toggleHandler={props.toggleHandler} />
       </header>
       <div className={classes["main-image"]}>
         <img src={img} alt="meals_photo" />

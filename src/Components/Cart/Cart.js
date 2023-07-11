@@ -26,12 +26,21 @@ const Cart = (props) => {
       user: userData,
     });
 
+    const loginId = localStorage.getItem("loginId");
+    const time = new Date();
+    console.log(time);
+
     const httpData = {
-      url: process.env.REACT_APP_FIREBASEAPI + "/orders.json",
+      url: process.env.REACT_APP_FIREBASEAPI + `/users/${loginId}/orders.json`,
       method: "POST",
       body: {
         orderedItems: cartCtx.cartData,
-        user: userData,
+        orderDetails: {
+          ...userData,
+          dateTime: time,
+          status: "Accepted for Preparing",
+          totalAmount: cartCtx.totalAmount,
+        },
       },
       headers: {
         "content-type": "application/json",

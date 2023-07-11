@@ -10,23 +10,26 @@ const MealItemForm = (props) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    if (cartCtx.isLogged) {
+      const enteredAmount = amountInputRef.current.value;
 
-    const enteredAmount = amountInputRef.current.value;
-
-    if (
-      enteredAmount.trim().length === 0 ||
-      +enteredAmount < 1 ||
-      +enteredAmount > 5
-    ) {
-      setAmountIsValid(false);
-      return;
+      if (
+        enteredAmount.trim().length === 0 ||
+        +enteredAmount < 1 ||
+        +enteredAmount > 5
+      ) {
+        setAmountIsValid(false);
+        return;
+      }
+      cartCtx.addItemHandler({
+        mealCount: +enteredAmount,
+        mealId: props.itemId,
+        mealPrice: props.price,
+        mealName: props.name,
+      });
+    } else {
+      console.log("please LOGIN ....");
     }
-    cartCtx.addItemHandler({
-      mealCount: +enteredAmount,
-      mealId: props.itemId,
-      mealPrice: props.price,
-      mealName: props.name,
-    });
   };
 
   return (

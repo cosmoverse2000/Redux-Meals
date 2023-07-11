@@ -1,15 +1,28 @@
 .button {
   cursor: pointer;
   font: inherit;
+  width: 12.5rem;
+  height: 3rem;
   border: none;
   background-color: #4d1601;
   color: white;
-  padding: 0.75rem 3rem;
+  padding: 0.75rem 1rem;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  border-radius: 25px;
   font-weight: bold;
+}
+
+.buttonleft {
+  border-radius: 25px 5px 5px 25px;
+  margin-right: 2px;
+}
+.buttonright {
+  border-radius: 5px 25px 25px 5px;
+}
+.buttonmid {
+  border-radius: 5px 5px 5px 5px;
+  margin-right: 2px;
 }
 
 .button:hover,

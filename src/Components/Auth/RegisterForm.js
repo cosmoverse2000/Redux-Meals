@@ -1,13 +1,27 @@
-import React, { useContext } from "react";
-import classes from "./CheckoutForm.module.css";
+import React from "react";
+import classes from "./RegisterForm.module.css";
 import useValidator from "../../hooks/use-validator";
-import CartContext from "../../Context/CartContext";
 
-const ChekoutForm = (props) => {
-  const { userData } = useContext(CartContext);
-
+const RegisterForm = (props) => {
   ////// INPUT VALIDTIONS START
-
+  const {
+    enteredInput: emailInput,
+    enteredInputIsValid: enteredEmailIsValid,
+    inputIsInvalid: emailIsInvalid,
+    inputChangeHandler: emailInputHandler,
+    inputBlurHandler: emailInputBlurHandler,
+    resetInput: resetEmailInput,
+  } = useValidator(
+    (value) => value.trim() !== "" && value.includes("@") && value.includes(".")
+  );
+  const {
+    enteredInput: passInput,
+    enteredInputIsValid: enteredPassIsValid,
+    inputIsInvalid: passIsInvalid,
+    inputChangeHandler: passInputHandler,
+    inputBlurHandler: passInputBlurHandler,
+    resetInput: resetPassInput,
+  } = useValidator((value) => value.trim().length > 6);
   const {
     enteredInput: nameInput,
     enteredInputIsValid: enteredNameIsValid,
@@ -45,6 +59,8 @@ const ChekoutForm = (props) => {
 
   let formIsValid = false;
   if (
+    enteredEmailIsValid &&
+    enteredPassIsValid &&
     enteredNameIsValid &&
     enteredAddressIsValid &&
     enteredContactIsValid &&
@@ -54,6 +70,8 @@ const ChekoutForm = (props) => {
   }
 
   const resetForm = () => {
+    resetEmailInput();
+    resetPassInput();
     resetNameInput();
     resetAddressInput();
     resetContactInput();
@@ -66,6 +84,8 @@ const ChekoutForm = (props) => {
       return;
     }
     props.onConfirm({
+      email: emailInput,
+      pass: passInput,
       name: nameInput,
       contact: contactInput,
       address: addressInput,
@@ -79,17 +99,54 @@ const ChekoutForm = (props) => {
       <div className={classes["input-container"]}>
         <div
           className={
+            emailIsInvalid
+              ? `${classes.input} ${classes.invalid}`
+              : classes.input
+          }
+        >
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            value={emailInput}
+            onChange={emailInputHandler}
+            onBlur={emailInputBlurHandler}
+          ></input>
+        </div>
+        {emailIsInvalid && (
+          <p className={classes["error-text"]}>Email is Invalid!</p>
+        )}
+        <div
+          className={
+            passIsInvalid
+              ? `${classes.input} ${classes.invalid}`
+              : classes.input
+          }
+        >
+          <label htmlFor="pass">Password</label>
+          <input
+            id="pass"
+            type="password"
+            value={passInput}
+            onChange={passInputHandler}
+            onBlur={passInputBlurHandler}
+          ></input>
+        </div>
+        {passIsInvalid && (
+          <p className={classes["error-text"]}>Make a strong password!</p>
+        )}
+        <div
+          className={
             nameIsInvalid
               ? `${classes.input} ${classes.invalid}`
               : classes.input
           }
         >
-          <label htmlFor="name">Your Name</label>
+          <label htmlFor="name">Full Name</label>
           <input
             id="name"
             type="text"
             value={nameInput}
-            placeholder={userData.name}
             onChange={nameInputHandler}
             onBlur={nameInputBlurHandler}
           ></input>
@@ -105,13 +162,12 @@ const ChekoutForm = (props) => {
               : classes.input
           }
         >
-          <label htmlFor="contact">Contact</label>
+          <label htmlFor="contact">Contact No.</label>
           <input
             id="contact"
             type="contact"
             value={contactInput}
             onChange={contactInputHandler}
-            placeholder={userData.contact}
             onBlur={contactInputBlurHandler}
           ></input>
         </div>
@@ -126,14 +182,13 @@ const ChekoutForm = (props) => {
               : classes.input
           }
         >
-          <label htmlFor="address">Address</label>
+          <label htmlFor="address">Default Address</label>
           <input
             id="address"
             type="text"
             value={addressInput}
             onChange={addressInputHandler}
             onBlur={addressInputBlurHandler}
-            placeholder={userData.address}
           ></input>
         </div>
         {addressIsInvalid && (
@@ -145,13 +200,12 @@ const ChekoutForm = (props) => {
             pinIsInvalid ? `${classes.input} ${classes.invalid}` : classes.input
           }
         >
-          <label htmlFor="pin">PIN Code</label>
+          <label htmlFor="pin">Default PIN Code</label>
           <input
             id="pin"
             type="contact"
             value={pinInput}
             onChange={pinInputHandler}
-            placeholder={userData.pinCode}
             onBlur={pinInputBlurHandler}
           ></input>
         </div>
@@ -161,36 +215,26 @@ const ChekoutForm = (props) => {
       </div>
 
       <div className={classes.actions}>
-        <button
-          className={classes["button--alt"]}
-          type="reset"
-          onClick={resetForm}
-        >
-          Reset
-        </button>
-        <button
-          className={classes.button}
-          type="submit"
-          disabled={!formIsValid}
-        >
-          Confirm
-        </button>
+        <p>Already registered ?</p>
+        <div>
+          <button
+            className={classes["button--alt"]}
+            type="reset"
+            onClick={resetForm}
+          >
+            Reset
+          </button>
+          <button
+            className={classes.button}
+            type="submit"
+            disabled={!formIsValid}
+          >
+            Register
+          </button>
+        </div>
       </div>
     </form>
   );
 };
 
-export default ChekoutForm;
-
-// const [nameInput, setNameInput] = useState("");
-// const [isTouched, setIsTouched] = useState(false);
-
-// const enteredNameIsValid = nameInput.trim() !== "";
-// const nameIsInvalid = isTouched && !enteredNameIsValid;
-
-// const nameInputHandler = (e) => {
-//   setNameInput(e.target.value);
-// };
-// const nameInputBlurHandler = () => {
-//   setIsTouched(true);
-// };
+export default RegisterForm;

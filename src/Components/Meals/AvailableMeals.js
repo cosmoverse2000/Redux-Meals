@@ -1,15 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import classes from "./AvailableMeals.module.css";
 import Card from "../UI/Card/Card";
 
 import MealItem from "./MealItem";
 import useFetch from "../../hooks/use-fetch";
+import CartContext from "../../Context/CartContext";
 
 const AvailableMeals = () => {
+  const cartCtx = useContext(CartContext);
   //// useFetch Started
 
   const { isLoading, error, fetchData } = useFetch();
+  const {
+    isLoading: isLoadingLogin,
+    error: errorLogin,
+    fetchData: fetchLoginData,
+  } = useFetch();
   const [mealsData, setMealsData] = useState([]);
 
   const ApplyDataFunc = (data) => {
@@ -27,13 +34,38 @@ const AvailableMeals = () => {
   };
 
   useEffect(() => {
+    //// FOR CREATING SEESSION CHECKING LOGIN STATUS IF ALREADY
+    const loginId = localStorage.getItem("loginId");
+
+    if (loginId) {
+      const ApplyDataFunc = (element) => {
+        console.log("fromAvailableMeals", element);
+        cartCtx.replaceCart({
+          cartData: element.cartState.cartData || [],
+          totalAmount: element.cartState.totalAmount,
+          userData: {
+            name: element.user.name,
+            contact: element.user.contact,
+            address: element.user.address,
+            pinCode: element.user.pinCode,
+          },
+          isLogged: true,
+        });
+      };
+      fetchLoginData(
+        {
+          url: process.env.REACT_APP_FIREBASEAPI + `/users/${loginId}.json`,
+        },
+        ApplyDataFunc
+      );
+    }
     fetchData(
       {
         url: process.env.REACT_APP_FIREBASEAPI + "/meals.json",
       },
       ApplyDataFunc
     );
-  }, [fetchData]);
+  }, [fetchData, fetchLoginData]);
 
   console.log("isloading:", isLoading);
   console.log("error", error);
