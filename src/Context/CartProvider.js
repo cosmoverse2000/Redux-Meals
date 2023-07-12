@@ -1,6 +1,5 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer } from "react";
 import CartContext from "./CartContext";
-import useFetch from "../hooks/use-fetch";
 
 const cartStateReducer = (state, action) => {
   if (action.type === "ADD_MEAL") {
@@ -98,8 +97,6 @@ const cartStateReducer = (state, action) => {
   };
 };
 
-let sessionStart = true;
-
 export const CartProvider = (props) => {
   ////////////////// CART DATA TO BE MANAGED AND TOTAL SUM FOR ORDER
   const [cartState, dispatchCartData] = useReducer(cartStateReducer, {
@@ -108,38 +105,6 @@ export const CartProvider = (props) => {
     isLogged: false,
     userData: {},
   });
-  //// FUNCTION TO SEND CARTDATA TO BACKEND  ON EACH CARTSTATE CHANGE
-  const { isLoading, error, fetchData } = useFetch();
-
-  useEffect(() => {
-    //// FUNCTION TO SEND CARTDATA TO BACKEND  ON EACH CARTSTATE CHANGE
-    const updateCartDataAtDB = () => {
-      const loginId = localStorage.getItem("loginId");
-      if (loginId && !sessionStart) {
-        const applyDataFunc = (data) => {
-          console.log("updateCartDataAtDB", data);
-        };
-        const httpData = {
-          url:
-            process.env.REACT_APP_FIREBASEAPI +
-            `/users/${loginId}/cartState.json`,
-          method: "PUT",
-          body: {
-            cartData: cartState.cartData,
-            totalAmount: cartState.totalAmount,
-          },
-          headers: {
-            "content-type": "application/json",
-          },
-        };
-        fetchData(httpData, applyDataFunc);
-      }
-    };
-
-    ///EXECUTING FUNC
-    updateCartDataAtDB();
-    sessionStart = false;
-  }, [fetchData, cartState.totalAmount, cartState.cartData]);
 
   /////////////// FOR HEADER BUTTON TOTAL MEALS ADDED TO CART
 

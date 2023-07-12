@@ -20,35 +20,9 @@ const Auth = (props) => {
 
   const [orderSuccess, setOrderSuccess] = useState(false);
 
-  // const applyDataFunc = (data) => {
-  //   console.log(data);
-  //   if (data) {
-  //     setOrderSuccess(true);
-  //   }
-  // };
-  // const submitHandler = (userData) => {
-  //   console.log({
-  //     orderedItems: cartCtx.cartData,
-  //     user: userData,
-  //   });
-
-  //   const httpData = {
-  //     url: process.env.REACT_APP_FIREBASEAPI + "/orders.json",
-  //     method: "POST",
-  //     body: {
-  //       orderedItems: cartCtx.cartData,
-  //       user: userData,
-  //     },
-  //     headers: {
-  //       "content-type": "application/json",
-  //     },
-  //   };
-
-  //   fetchData(httpData, applyDataFunc);
-  // };
   const loginSubmitHandler = (userData) => {
     const applyDataFunc = (data) => {
-      console.log(data);
+      // console.log(data);
       let emailFound = false;
       if (data) {
         for (const key in data) {
@@ -103,7 +77,7 @@ const Auth = (props) => {
     const applyDataFunc = (data) => {
       console.log(data);
       if (data) {
-        localStorage.setItem("loginId", data.name);
+        // localStorage.setItem("loginId", data.name);
         setOrderSuccess(true);
       }
     };
@@ -149,6 +123,7 @@ const Auth = (props) => {
   }
 
   if (!isLoading && error) {
+    console.log(error);
     cartContent = (
       <div className={classes.actions}>
         <h3>Sorry! your order in failed. Something wrong. </h3>
